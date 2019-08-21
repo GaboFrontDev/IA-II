@@ -8,18 +8,22 @@ entradas = [
 umbral = 1.5
 
 """ PESOS PARA AND """
-# peso1 = 1
-# peso2 = 1
+peso1 = 1
+peso2 = 1
 """ PESOS PARA OR """
-peso1 = 2
-peso2 = 2
+# peso1 = 2
+# peso2 = 2
 
 prod_punto = [a[0]*peso1 + a[1]*peso2 - umbral for a in entradas]
 steps = [(a > 0) for a in prod_punto]
 
 m = peso1/peso2
 b = umbral / peso2
-graph = [[m*x+b, x + 0]for x in [steps[0], steps[1]]]
+graph = [[x + 0, b - x*m]for x in steps]
+print(steps)
 print(graph)
-plt.plot(graph)
+for entrada, step in zip(entradas, steps):
+    plt.scatter(entrada[0], entrada[1], color="blue" if step else "red")
+
+plt.plot(graph[0], graph[3])
 plt.show()
