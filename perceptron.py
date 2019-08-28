@@ -42,7 +42,6 @@ while True in did_error:  # until converge
     if idx >= len(entradas):
         x1 = np.linspace(-3, 3, 20)
         x2 = (-peso1/peso2) * x1 - (umbral / peso2)
-        # print("salida: ", y)
         for entrada, step in zip(entradas, D):
             plt.scatter(entrada[0], entrada[1],
                         color="blue" if step else "red")
