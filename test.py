@@ -8,58 +8,68 @@ def act_fun(val):
 
 
 data = [
-    [
-        [0, 0, 0],
-        [1, 0, 1],
-        [0, 1, 0],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-    ], [
-        [0, 0, 0],
-        [1, 0, 1],
-        [0, 1, 0],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-    ], [
-        [0, 0, 0],
-        [1, 0, 1],
-        [0, 1, 0],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-    ]
-
+    [0, 0],
+    [1, 0],
+    [0, 1],
+    [1, 1]
 ]
 
-D = [[0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1]]
+D = [[0, 0, 0, 1], [0, 1, 1, 0]]
 
 
-def read_by_tokens(fileobj):
+def read_entries(fileobj):
     for line in fileobj:
+        entry = []
         for token in line.split():
-            yield token
+            entry.append(int(token))
+        if entry:
+            yield entry
+        else:
+            pass
+
+
+def has_error(neuronas):
+
+    for neurona in neuronas:
+        if neurona.did_error:
+            return True
+    return False
 
 
 def main():
     entrada = open(sys.argv[1])
     maestro = open(sys.argv[2])
-    for token in read_by_tokens(entrada):
-        print(token)
-    for token in read_by_tokens(maestro):
-        print(token)
-    segmentIdx = 0
-    for segment in data:
-        i = 0
-        neurona = Neurona(len(segment[i]), etha=0.5)
-        while neurona.did_error:
-            neurona.did_error = False
-            while i < len(segment):
-                neurona.evaluate_error(D[segmentIdx][i], segment[i], act_fun)
-                i += 1
-            i = 0
-        print("termina el entrenamiento")
+    data = []
+    D = []
+    for entry in read_entries(entrada):
+        data.append(entry)
+    for token in read_entries(maestro):
+        D.append(token)
+
+    print(data)
+    print(D)
+    neuronas = []
+    index = 0
+    # Carga inicial
+    while index < len(D[0]):
+        neuronas.append(Neurona(len(data[index]), etha=0.5))
+        index += 1
+    entrySegment = 0
+
+    # Entrenamiento por fila de entradas
+    while entrySegment < len(data):
+        neuronaIdx = 0
+        desiredSegment = 0
+        while neuronaIdx < len(neuronas):
+            neuronas[neuronaIdx].did_error = False
+            neuronas[neuronaIdx].evaluate_error(
+                D[entrySegment][desiredSegment], data[entrySegment], act_fun)
+            desiredSegment += 1
+            if neuronas[neuronaIdx].did_error:
+                entrySegment = 0
+            neuronaIdx += 1
+        print("Segmento", entrySegment,  "terminado")
+        entrySegment += 1
 
 
 if __name__ == "__main__":

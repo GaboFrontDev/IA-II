@@ -20,16 +20,14 @@ class Neurona:
 
     def recalc_w(self, data):
         sl = self
-        print("recalculando pesos...")
-        print("W(k)", sl.W)
+        # print("recalculando pesos...")
         output = sl.etha * sl.error * np.array(data)
         sl.W = np.array([sum(x) for x in zip(sl.W, output)])
         sl.umbral = sl.umbral + sl.etha * sl.error
-        print("W(k+1)", sl.W)
 
-    def evaluate_error(self, D, data, act_fun):
+    def evaluate_error(self, desired, data, act_fun):
         dot = self.dot(data)
-        self.error = D - act_fun(dot)
+        self.error = desired - act_fun(dot)
         if self.error != 0:
             self.did_error = True
             self.recalc_w(data)
