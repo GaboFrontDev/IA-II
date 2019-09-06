@@ -14,7 +14,7 @@ data = [
     [1, 1]
 ]
 
-D = [[0, 0, 0, 1], [0, 1, 1, 0]]
+D = [[1], [0], [0], [1]]
 
 
 def read_entries(fileobj):
@@ -24,19 +24,10 @@ def read_entries(fileobj):
             entry.append(int(token))
         if entry:
             yield entry
-        else:
-            pass
-
-
-def has_error(neuronas):
-
-    for neurona in neuronas:
-        if neurona.did_error:
-            return True
-    return False
 
 
 def main():
+    print("Abriendo archivos")
     entrada = open(sys.argv[1])
     maestro = open(sys.argv[2])
     data = []
@@ -46,30 +37,33 @@ def main():
     for token in read_entries(maestro):
         D.append(token)
 
-    print(data)
-    print(D)
+    print("información cargada")
+    print("Maestro: ", D)
+    print("Entradas: ", data)
     neuronas = []
     index = 0
     # Carga inicial
     while index < len(D[0]):
-        neuronas.append(Neurona(len(data[index]), etha=0.5))
+        neuronas.append(Neurona(len(data[0]), etha=0.1))
         index += 1
     entrySegment = 0
-
+    error = False
     # Entrenamiento por fila de entradas
     while entrySegment < len(data):
         neuronaIdx = 0
-        desiredSegment = 0
+        # Entrenamiento de cada neurona con el indice de fila correspondiente
         while neuronaIdx < len(neuronas):
-            neuronas[neuronaIdx].did_error = False
             neuronas[neuronaIdx].evaluate_error(
-                D[entrySegment][desiredSegment], data[entrySegment], act_fun)
-            desiredSegment += 1
+                D[entrySegment][neuronaIdx], data[entrySegment], act_fun)
             if neuronas[neuronaIdx].did_error:
+                error = True
                 entrySegment = 0
+                break
+            else:
+                error = False
             neuronaIdx += 1
-        print("Segmento", entrySegment,  "terminado")
-        entrySegment += 1
+        if not error:
+            entrySegment += 1
 
 
 if __name__ == "__main__":
