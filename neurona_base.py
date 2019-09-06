@@ -22,7 +22,7 @@ class Neurona:
         sl = self
         output = sl.etha * sl.error * np.array(data)
         sl.W = np.array([sum(x) for x in zip(sl.W, output)])
-        print("actualización: ", sl.W)
+        # print("actualización: ", sl.W)
 
         sl.umbral = sl.umbral + sl.etha * sl.error
 
