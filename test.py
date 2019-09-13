@@ -44,7 +44,7 @@ def main():
     index = 0
     # Carga inicial
     while index < len(D[0]):
-        neuronas.append(Neurona(len(data[0]), etha=0.1))
+        neuronas.append(Neurona(len(data[0]), eta=0.1))
         index += 1
     entrySegment = 0
     error = False
@@ -53,7 +53,7 @@ def main():
         neuronaIdx = 0
         # Entrenamiento de cada neurona con el indice de fila correspondiente
         while neuronaIdx < len(neuronas):
-            neuronas[neuronaIdx].evaluate_error(
+            neuronas[neuronaIdx].train(
                 D[entrySegment][neuronaIdx], data[entrySegment], act_fun)
             if neuronas[neuronaIdx].did_error:
                 error = True
