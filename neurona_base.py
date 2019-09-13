@@ -41,6 +41,7 @@ class Neurona:
         """ Add a bias column of 1's to our data, X """
         bias = np.ones((X.shape[0], 1))
         biased_X = np.hstack((bias, X))
+        print(biased_X)
         return biased_X
 
     def _initialise_weights(self, X):

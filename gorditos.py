@@ -20,6 +20,8 @@ alturaDict = {
     "maximum": 1.90
 }
 
+X = []
+
 
 def main():
     neurona = []
@@ -31,9 +33,11 @@ def main():
     for dato, step in zip(data, D):
         plt.scatter(dato[0], dato[1],
                     color="red" if step else "blue")
+    plt.show()
     epoch = 100
     neurona = Neurona(learn_rate=0.001, iterations=epoch)
     neurona.fit(data, D)
+    X = data
     return neurona
 
 
@@ -45,3 +49,7 @@ if __name__ == "__main__":
     plt.xlabel('Epochs')
     plt.ylabel('Errors')
     plt.show()
+    # a = [0, -data[0]/classifier.weights[1]]
+    # c = [-data[0]/classifier.weights[0], 0]
+    # plt.plot(a, c)
+    # plt.show()
